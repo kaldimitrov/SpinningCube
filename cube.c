@@ -1,4 +1,5 @@
 #include <stdio.h>
+#include <stdlib.h>
 #include <string.h>
 #include <unistd.h>
 #include <math.h>
@@ -6,13 +7,15 @@
 #define WIDTH 160
 #define HEIGHT 45
 
+#define cameraDistance 100.0
+#define cubeWidth 20.0
+#define incrementSpeed 0.75
+
+#define BACKGROUND ' '
+
 float rotationX = 0.0;
 float rotationY = 0.0;
 float rotationZ = 0.0;
-
-float cameraDistance = 100.0;
-
-float cubeWidth = 20.0;
 
 float depthArray[WIDTH * HEIGHT];
 char screenArray[WIDTH * HEIGHT];
@@ -71,6 +74,42 @@ void calculateForSurface(float cubeX, float cubeY, float cubeZ, char surface) {
 }
 
 int main() {
+    int ret = write(1, "\x1b[2J", 4);
+    if(ret < 0) {
+        printf("Error writing to stdout");
+        exit(1);
+    }
 
-  return 0;
+  while (1) {
+    memset(depthArray, 0, WIDTH * HEIGHT * 4);
+    memset(screenArray, BACKGROUND, WIDTH * HEIGHT);
+
+    for (float cubeX = -cubeWidth; cubeX < cubeWidth; cubeX += incrementSpeed) {
+        for (float cubeY = -cubeWidth; cubeY < cubeWidth; cubeY += incrementSpeed) {
+            calculateForSurface(cubeX, cubeY, -cubeWidth, '@');
+            calculateForSurface(cubeWidth, cubeY, cubeX, '$');
+            calculateForSurface(-cubeWidth, cubeY, -cubeX, '~');
+            calculateForSurface(-cubeX, cubeY, cubeWidth, '#');
+            calculateForSurface(cubeX, -cubeWidth, -cubeY, ';');
+            calculateForSurface(cubeX, cubeWidth, cubeY, '+');
+        }
+    }
+
+    ret = write(1, "\x1b[H", 4);
+    if(ret < 0) {
+        printf("Error writing to stdout");
+        exit(1);
+    }
+
+    for (int k = 0; k < WIDTH * HEIGHT; k++) {
+        putchar(k % WIDTH ? screenArray[k] : 10);
+    }
+    rotationX += 0.05;
+    rotationY += 0.05;
+    rotationZ += 0.01;
+
+    usleep(8000 * 2);
+    }
+
+    return 0;
 }
