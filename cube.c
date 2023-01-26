@@ -3,16 +3,20 @@
 #include <unistd.h>
 #include <math.h>
 
+#define WIDTH 160
+#define HEIGHT 45
+
 float rotationX = 0.0;
 float rotationY = 0.0;
 float rotationZ = 0.0;
 
 float cameraDistance = 100.0;
 
-int width = 160;
-int height = 45;
-
 float cubeWidth = 20.0;
+
+float depthArray[WIDTH * HEIGHT];
+char screenArray[WIDTH * HEIGHT];
+
 
 float calculateX(int cubeX, int cubeY, int cubeZ) {
     float x = cubeY * sin(rotationX) * sin(rotationY) * cos(rotationZ) - 
@@ -42,16 +46,28 @@ float calculateZ(int cubeX, int cubeY, int cubeZ) {
     return z;
 }
 
-void calculateForSurface(float cubeX, float cubeY, float cubeZ) {
+void calculateForSurface(float cubeX, float cubeY, float cubeZ, char surface) {
     float x = calculateX(cubeX, cubeY, cubeZ);
     float y = calculateY(cubeX, cubeY, cubeZ);
     float z = calculateZ(cubeX, cubeY, cubeZ) + cameraDistance;
 
     float reciprocalZ = 1 / z;
 
-    int screenX = (int)(width / 2 + (cubeWidth * -2) + reciprocalZ * x * 80);
-    int screenY = (int)(height / 2 + 40 * reciprocalZ * y);
+    int screenX = (int)(WIDTH / 2 + (cubeWidth * -2) + reciprocalZ * x * 80);
+    int screenY = (int)(HEIGHT / 2 + 40 * reciprocalZ * y);
 
+    int pixelIndex = screenX + screenY * WIDTH;
+
+    if(!(pixelIndex < 0 || pixelIndex > WIDTH * HEIGHT)) {
+        return;
+    }
+
+    if(reciprocalZ < depthArray[pixelIndex]) {
+        return;
+    }
+
+    depthArray[pixelIndex] = reciprocalZ;
+    screenArray[pixelIndex] = surface;
 }
 
 int main() {
