@@ -1,6 +1,6 @@
 # SpinningCube
 
-[![Demo](https://i.imgur.com/V2kxVMZ.gif)](https://i.imgur.com/V2kxVMZ.gif)
+[![Demo](https://i.imgur.com/lLLaj4s.png)](https://i.imgur.com/lLLaj4s.png)
 
 ## Installation
 
