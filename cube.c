@@ -7,6 +7,13 @@ float rotationX = 0.0;
 float rotationY = 0.0;
 float rotationZ = 0.0;
 
+float cameraDistance = 100.0;
+
+int width = 160;
+int height = 45;
+
+float cubeWidth = 20.0;
+
 float calculateX(int cubeX, int cubeY, int cubeZ) {
     float x = cubeY * sin(rotationX) * sin(rotationY) * cos(rotationZ) - 
               cubeZ * cos(rotationX) * sin(rotationY) * cos(rotationZ) + 
@@ -33,6 +40,18 @@ float calculateZ(int cubeX, int cubeY, int cubeZ) {
               cubeX * sin(rotationY);
 
     return z;
+}
+
+void calculateForSurface(float cubeX, float cubeY, float cubeZ) {
+    float x = calculateX(cubeX, cubeY, cubeZ);
+    float y = calculateY(cubeX, cubeY, cubeZ);
+    float z = calculateZ(cubeX, cubeY, cubeZ) + cameraDistance;
+
+    float reciprocalZ = 1 / z;
+
+    int screenX = (int)(width / 2 + (cubeWidth * -2) + reciprocalZ * x * 80);
+    int screenY = (int)(height / 2 + 40 * reciprocalZ * y);
+
 }
 
 int main() {
