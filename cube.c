@@ -56,15 +56,19 @@ void calculateForSurface(float cubeX, float cubeY, float cubeZ, char surface) {
 
     float reciprocalZ = 1 / z;
 
+    /// Calculate the screen coordinates of the cube
     int screenX = (int)(WIDTH / 2 + (cubeWidth * -2) + reciprocalZ * x * 80);
     int screenY = (int)(HEIGHT / 2 + 40 * reciprocalZ * y);
 
+    // Calculate the index of the pixel for both the depth and screen array
     int pixelIndex = screenX + screenY * WIDTH;
 
+    // Check if the pixel is outside the screen
     if(pixelIndex < 0 || pixelIndex > WIDTH * HEIGHT) {
         return;
     }
 
+    // Check if the pixel is behind another pixel
     if(reciprocalZ < depthArray[pixelIndex]) {
         return;
     }
@@ -74,6 +78,7 @@ void calculateForSurface(float cubeX, float cubeY, float cubeZ, char surface) {
 }
 
 int main() {
+    // Clear the screen before starting
     int ret = write(1, "\x1b[2J", 4);
     if(ret == -1) {
         printf("Error writing to stdout");
@@ -81,9 +86,19 @@ int main() {
     }
 
     while (1) {
+        // Clear the depth and screen arrays and reset the values
         memset(depthArray, 0, WIDTH * HEIGHT * 4);
         memset(screenArray, BACKGROUND, WIDTH * HEIGHT);
 
+        /*
+        * Calculate the surface of the cube:
+        *  @ - Front
+        *  $ - Right
+        *  ~ - Left
+        *  # - Back
+        *  ; - Bottom
+        *  + - Top
+        */
         for (float cubeX = -cubeWidth; cubeX < cubeWidth; cubeX += incrementSpeed) {
             for (float cubeY = -cubeWidth; cubeY < cubeWidth; cubeY += incrementSpeed) {
                 calculateForSurface(cubeX, cubeY, -cubeWidth, '@');
@@ -95,21 +110,25 @@ int main() {
             }
         }
 
+        // Move the cursor to the top left corner
         ret = write(1, "\x1b[H", 4);
         if(ret == -1) {
             printf("Error writing to stdout");
             exit(2);
         }
 
+        // Print the cube to the screen
         for (int k = 0; k < (WIDTH * HEIGHT); k++) {
             putchar(k % WIDTH ? screenArray[k] : 10);
         }
 
+        // Rotate the cube on the X, Y and Z axis
         rotationX += 0.05;
         rotationY += 0.05;
         rotationZ += 0.01;
 
-        usleep(8000 * 2);
+        // Sleep for 10 milliseconds
+        usleep(10000);
     }
 
     return 0;
