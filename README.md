@@ -1,6 +1,6 @@
 # SpinningCube
 
-[![Demo](https://i.gyazo.com/768ff092be170dd1da4649bf9243c25c.gif)](https://gyazo.com/768ff092be170dd1da4649bf9243c25c)
+[![Demo](https://i.imgur.com/V2kxVMZ.gif)](https://i.imgur.com/V2kxVMZ.gif)
 
 ## Installation
 
@@ -27,8 +27,6 @@ Run the compiled program
 ```bash
     ./cube
 ```
-
-
 
 ## License
 [![GPL-3.0](https://img.shields.io/badge/GitHub-GPL--3.0-informational)](https://choosealicense.com/licenses/gpl-3.0/)
