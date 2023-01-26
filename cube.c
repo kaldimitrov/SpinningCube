@@ -27,6 +27,14 @@ float calculateY(int cubeX, int cubeY, int cubeZ) {
     return y;
 }
 
+float calculateZ(int cubeX, int cubeY, int cubeZ) {
+    float z = cubeZ * cos(rotationX) * cos(rotationY) -
+              cubeY * sin(rotationX) * cos(rotationY) + 
+              cubeX * sin(rotationY);
+
+    return z;
+}
+
 int main() {
 
   return 0;
