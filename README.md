@@ -7,25 +7,25 @@
 Clone the project
 
 ```bash
-  git clone https://github.com/ToxicSDev/SpinningCube.git
+git clone https://github.com/ToxicSDev/SpinningCube.git
 ```
 
 Go to the project directory
 
 ```bash
-  cd my-project
+cd my-project
 ```
 
 Compile the project
 
 ```bash
-  gcc cube.c -o cube -lm
+gcc cube.c -o cube -lm
 ```
 
 Run the compiled program
 
 ```bash
-    ./cube
+./cube
 ```
 
 ## License
